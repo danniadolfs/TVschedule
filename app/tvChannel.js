@@ -19,7 +19,7 @@ var REQUEST_URL = 'http://apis.is';
 
 var tvChannel = React.createClass({
   statics: {
-    title: 'Channel',
+    title: 'Channel', //TODO: Add channel names (this.props.chEnd)
     description: 'Channel schedule'
   },
 
@@ -31,8 +31,7 @@ var tvChannel = React.createClass({
   },
 
   componentWillMount: function() {
-    return(
-      <Text> Loading... </Text>);
+
   },
 
   //Data has been procced
@@ -65,6 +64,8 @@ var tvChannel = React.createClass({
     );
   },
 
+  //Handle the REST request
+  //TODO: Move utility function into seperate file
   fetchData: function() {
     fetch(REQUEST_URL+this.props.chEnd)
       .catch((error) => {
@@ -80,6 +81,7 @@ var tvChannel = React.createClass({
       .done();
   },
 
+  //Render channel schedule
   renderChannel: function(tv) {
     return (
       <TouchableHighlight>
@@ -95,6 +97,9 @@ var tvChannel = React.createClass({
   }
 });
 
+/*---------------------------------
+              STYLESHEET 
+ ----------------------------------*/
 var styles = StyleSheet.create({
   row: {
     flexDirection: 'row',

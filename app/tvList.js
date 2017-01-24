@@ -46,6 +46,7 @@ var tvList = React.createClass({
   },
 
   //Handle the REST request
+  //TODO: Move utility function into seperate file
   fetchData: function() {
     fetch(REQUEST_URL)
       .catch((error) => {
@@ -80,6 +81,10 @@ var tvList = React.createClass({
   }
 });
 
+
+/*---------------------------------
+              STYLESHEET 
+ ----------------------------------*/
 var styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
