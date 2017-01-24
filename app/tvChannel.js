@@ -15,7 +15,6 @@ var {
   View,
 } = ReactNative;
 
-//var endpoint = this.props.chEnd;
 var REQUEST_URL = 'http://apis.is';
 
 var tvChannel = React.createClass({
@@ -27,20 +26,21 @@ var tvChannel = React.createClass({
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      dataSource: ds.cloneWithRows(this._genRows({})),
+      dataSource: ds.cloneWithRows(['row 1', 'row 2']),
     };
   },
 
-  _pressData: ({}: {[key: name]: String}),
-
   componentWillMount: function() {
-    this._pressData = {};
+    return(
+      <Text> Loading... </Text>);
   },
 
+  //Data has been procced
   componentDidMount: function() {
     this.fetchData();
   },
-
+  
+  //Render List to populate.
   render: function() {
     return (
         <ListView
@@ -53,7 +53,6 @@ var tvChannel = React.createClass({
   _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
     return (
       <TouchableHighlight onPress={() => {
-          this._pressRow(rowID);
           highlightRow(sectionID, rowID);
         }}>
         <View>
@@ -64,21 +63,6 @@ var tvChannel = React.createClass({
         </View>
       </TouchableHighlight>
     );
-  },
-
-  _genRows: function(pressData: {[key: number]: boolean}): Array<string> {
-    var dataBlob = [];
-    for (var ii = 0; ii < 100; ii++) {
-      dataBlob.push('Row ' + ii);
-    }
-    return dataBlob;
-  },
-
-  _pressRow: function(rowID: number) {
-    this._pressData[rowID] = !this._pressData[rowID];
-    this.setState({dataSource: this.state.dataSource.cloneWithRows(
-      this._genRows(this._pressData)
-    )});
   },
 
   fetchData: function() {
@@ -97,8 +81,6 @@ var tvChannel = React.createClass({
   },
 
   renderChannel: function(tv) {
-    console.log(String(tv));
-
     return (
       <TouchableHighlight>
         <View style={styles.container}>

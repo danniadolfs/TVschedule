@@ -14,28 +14,28 @@ var {
   View,
 } = ReactNative;
 
-var REQUEST_URL = 'http://apis.is/tv/';
-var chEnd = '/tv/ruv';
+var REQUEST_URL = 'http://apis.is/tv/'; //url to json file
+var chEnd = '/tv/ruv'; //Default channel selection
 
 var tvList = React.createClass({
 
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      dataSource: ds.cloneWithRows(this._genRows({})),
+      dataSource: ds.cloneWithRows(['row 1', 'row 2']),
     };
   },
 
-  _pressData: ({}: {[key: name]: String}),
-
+  //
   componentWillMount: function() {
-    this._pressData = {};
   },
 
+  //Data has been procced
   componentDidMount: function() {
     this.fetchData();
   },
 
+  //Render List to populate.
   render: function() {
     return (
         <ListView
@@ -45,22 +45,7 @@ var tvList = React.createClass({
     );
   },
 
-  _genRows: function(pressData: {[key: number]: boolean}): Array<string> {
-    var dataBlob = [];
-    for (var ii = 0; ii < 100; ii++) {
-      var pressedText = pressData[ii] ? ' (pressed)' : '';
-      dataBlob.push('Row ' + ii + pressedText);
-    }
-    return dataBlob;
-  },
-
-  _pressRow: function(rowID: number) {
-    this._pressData[rowID] = !this._pressData[rowID];
-    this.setState({dataSource: this.state.dataSource.cloneWithRows(
-      this._genRows(this._pressData)
-    )});
-  },
-
+  //Handle the REST request
   fetchData: function() {
     fetch(REQUEST_URL)
       .catch((error) => {
@@ -68,7 +53,6 @@ var tvList = React.createClass({
       })
       .then((response) => response.json())
       .then((responseData) => {
-        console.log("data",responseData.results[0].channels);
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(responseData.results[0].channels),
           loaded: true,
@@ -77,6 +61,7 @@ var tvList = React.createClass({
       .done();
   },
 
+  //Render Channel list from the REST request
   renderTv: function(tv) {
     const channelScene = () => {
       chEnd = tv.endpoint;
