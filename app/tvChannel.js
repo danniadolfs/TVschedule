@@ -1,10 +1,9 @@
 // app/tvChannel.js
 
-// app/tvChannel.js
-
 'use strict';
 
-import { Actions } from 'react-native-router-flux'; // New code
+import { Actions } from 'react-native-router-flux';
+import {tvList} from './tvList';
 
 var React = require('react');
 var ReactNative = require('react-native');
@@ -12,17 +11,17 @@ var {
   ListView,
   TouchableHighlight,
   StyleSheet,
-  RecyclerViewBackedScrollView,
   Text,
   View,
 } = ReactNative;
 
-var REQUEST_URL = 'http://apis.is/tv/stod2';
+//var endpoint = this.props.chEnd;
+var REQUEST_URL = 'http://apis.is';
 
 var tvChannel = React.createClass({
   statics: {
-    title: '<ListView>',
-    description: 'Performant, scrollable list of data.'
+    title: 'Channel',
+    description: 'Channel schedule'
   },
 
   getInitialState: function() {
@@ -46,7 +45,7 @@ var tvChannel = React.createClass({
     return (
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={this.renderTv}
+          renderRow={this.renderChannel}
         ></ListView>
     );
   },
@@ -54,7 +53,6 @@ var tvChannel = React.createClass({
   _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
     return (
       <TouchableHighlight onPress={() => {
-          Actions.tv_channel;
           this._pressRow(rowID);
           highlightRow(sectionID, rowID);
         }}>
@@ -70,9 +68,8 @@ var tvChannel = React.createClass({
 
   _genRows: function(pressData: {[key: number]: boolean}): Array<string> {
     var dataBlob = [];
-    for (var ii = 0; ii < 1000; ii++) {
-      var pressedText = pressData[ii] ? ' (pressed)' : '';
-      dataBlob.push('Row ' + ii + pressedText);
+    for (var ii = 0; ii < 100; ii++) {
+      dataBlob.push('Row ' + ii);
     }
     return dataBlob;
   },
@@ -85,43 +82,33 @@ var tvChannel = React.createClass({
   },
 
   fetchData: function() {
-    fetch(REQUEST_URL)
+    fetch(REQUEST_URL+this.props.chEnd)
       .catch((error) => {
         console.error(error);
       })
       .then((response) => response.json())
       .then((responseData) => {
-        console.log("Channel specific data: ");
-        console.log("data", responseData.results[20]);
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData.results[0]),
+          dataSource: this.state.dataSource.cloneWithRows(responseData.results),
           loaded: true,
         });
       })
       .done();
   },
 
-  renderTv: function(tv) {
+  renderChannel: function(tv) {
+    console.log(String(tv));
+
     return (
       <TouchableHighlight>
         <View style={styles.container}>
           <View style={styles.rightContainer}>
-            <Text style={styles.title}>{String(tv)}</Text>
+            <Text style={styles.startTime}>{String(tv.startTime).substring(10, 16)} </Text>
+            <Text style={styles.title}> {tv.title} </Text>
+            <Text style={styles.duration}>Lengd(hh:mm): {tv.duration} </Text>
           </View>
         </View>
       </TouchableHighlight>
-    );
-  },
-
-  _renderSeparator: function(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
-    return (
-      <View
-        key={`${sectionID}-${rowID}`}
-        style={{
-          height: adjacentRowHighlighted ? 4 : 1,
-          backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
-        }}
-      ></View>
     );
   }
 });
@@ -133,16 +120,25 @@ var styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#F6F6F6',
   },
-  text: {
-    flex: 1,
-  },
     title: {
+    fontWeight: 'bold',
     flex: 1,
     fontSize: 20,
     paddingTop: 20,
     marginBottom: 8,
     textAlign: 'center',
   },
+  duration: {
+    borderBottomColor: '#bbb',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingBottom: 5,
+  },
+  startTime: {
+    color: 'green',
+    paddingTop: 5,
+    textAlign: 'center',
+  },
+
 });
 
 module.exports = tvChannel;

@@ -2,7 +2,7 @@
 
 'use strict';
 
-import { Actions } from 'react-native-router-flux'; // New code
+import { Actions } from 'react-native-router-flux';
 
 var React = require('react');
 var ReactNative = require('react-native');
@@ -10,18 +10,14 @@ var {
   ListView,
   TouchableHighlight,
   StyleSheet,
-  RecyclerViewBackedScrollView,
   Text,
   View,
 } = ReactNative;
 
 var REQUEST_URL = 'http://apis.is/tv/';
+var chEnd = '/tv/ruv';
 
 var tvList = React.createClass({
-  statics: {
-    title: '<ListView>',
-    description: 'Performant, scrollable list of data.'
-  },
 
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -46,23 +42,6 @@ var tvList = React.createClass({
           dataSource={this.state.dataSource}
           renderRow={this.renderTv}
         ></ListView>
-    );
-  },
-
-  _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
-    return (
-      <TouchableHighlight onPress={() => {
-          Actions.tv_channel;
-          this._pressRow(rowID);
-          highlightRow(sectionID, rowID);
-        }}>
-        <View>
-          <View style={styles.row}>
-            <Text style={styles.text}>
-            </Text>
-          </View>
-        </View>
-      </TouchableHighlight>
     );
   },
 
@@ -99,26 +78,19 @@ var tvList = React.createClass({
   },
 
   renderTv: function(tv) {
+    const channelScene = () => {
+      chEnd = tv.endpoint;
+      console.log(chEnd);
+      Actions.tv_channel({chEnd});
+    }; 
     return (
-      <TouchableHighlight onPress={() => Actions.tv_channel()}>
+      <TouchableHighlight onPress={channelScene}>
         <View style={styles.container}>
           <View style={styles.rightContainer}>
             <Text style={styles.title}>{tv.name}</Text>
           </View>
         </View>
       </TouchableHighlight>
-    );
-  },
-
-  _renderSeparator: function(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
-    return (
-      <View
-        key={`${sectionID}-${rowID}`}
-        style={{
-          height: adjacentRowHighlighted ? 4 : 1,
-          backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
-        }}
-      ></View>
     );
   }
 });
