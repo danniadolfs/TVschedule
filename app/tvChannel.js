@@ -30,10 +30,6 @@ var tvChannel = React.createClass({
     };
   },
 
-  componentWillMount: function() {
-
-  },
-
   //Data has been procced
   componentDidMount: function() {
     this.fetchData();
@@ -46,21 +42,6 @@ var tvChannel = React.createClass({
           dataSource={this.state.dataSource}
           renderRow={this.renderChannel}
         ></ListView>
-    );
-  },
-
-  _renderRow: function(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
-    return (
-      <TouchableHighlight onPress={() => {
-          highlightRow(sectionID, rowID);
-        }}>
-        <View>
-          <View style={styles.row}>
-            <Text style={styles.text}>
-            </Text>
-          </View>
-        </View>
-      </TouchableHighlight>
     );
   },
 
@@ -86,11 +67,9 @@ var tvChannel = React.createClass({
     return (
       <TouchableHighlight>
         <View style={styles.container}>
-          <View style={styles.rightContainer}>
             <Text style={styles.startTime}>{String(tv.startTime).substring(10, 16)} </Text>
             <Text style={styles.title}> {tv.title} </Text>
             <Text style={styles.duration}>Lengd(hh:mm): {tv.duration} </Text>
-          </View>
         </View>
       </TouchableHighlight>
     );
@@ -98,14 +77,16 @@ var tvChannel = React.createClass({
 });
 
 /*---------------------------------
-              STYLESHEET 
+              STYLESHEET          
  ----------------------------------*/
 var styles = StyleSheet.create({
+  container: {
+      backgroundColor: '#d9e5f9',
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
     padding: 10,
-    backgroundColor: '#F6F6F6',
   },
     title: {
     fontWeight: 'bold',

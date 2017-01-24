@@ -26,10 +26,6 @@ var tvList = React.createClass({
     };
   },
 
-  //
-  componentWillMount: function() {
-  },
-
   //Data has been procced
   componentDidMount: function() {
     this.fetchData();
@@ -66,21 +62,17 @@ var tvList = React.createClass({
   renderTv: function(tv) {
     const channelScene = () => {
       chEnd = tv.endpoint;
-      console.log(chEnd);
       Actions.tv_channel({chEnd});
     }; 
     return (
       <TouchableHighlight onPress={channelScene}>
         <View style={styles.container}>
-          <View style={styles.rightContainer}>
             <Text style={styles.title}>{tv.name}</Text>
-          </View>
         </View>
       </TouchableHighlight>
     );
   }
 });
-
 
 /*---------------------------------
               STYLESHEET 
@@ -89,17 +81,15 @@ var styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#F6F6F6',
   },
-  text: {
-    flex: 1,
-  },
-    title: {
+  title: {
+    backgroundColor: '#a9c1e8',
     flex: 1,
     fontSize: 20,
     paddingTop: 20,
-    marginBottom: 8,
+    margin: 5,
+    marginLeft: 5,
+    marginRight: 5,
     textAlign: 'center',
   },
 });
