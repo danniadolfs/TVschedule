@@ -1,0 +1,3 @@
+rootProject.name = 'TVschedule'
+
+include ':app'
